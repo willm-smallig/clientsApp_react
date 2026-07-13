@@ -1,0 +1,7 @@
+{
+  "name": "clientsApp_React",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
