@@ -17,6 +17,7 @@ export default function ClientsPage() {
     const datos = await ClientsService.getClients();
     setClients(datos);
   };
+
   /* const editar=async()=>{
     history.push('/editar');
   } */
@@ -45,6 +46,7 @@ export default function ClientsPage() {
             <td>{cliente.email}</td>
             <td>{cliente.phone}</td>
             <td><IonButton routerLink={`/edit/${cliente.id}`}>Editar</IonButton></td>
+            <td><IonButton routerLink={`/delete/${cliente.id}`}>Eliminar</IonButton></td>
           </tr>
         ))}
       </tbody>

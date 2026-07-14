@@ -29,4 +29,12 @@ export class ClientsService {
     }
     return data;
   }
-} //Cierra clase ClientsService
+  //Cierra clase ClientsService
+
+  static async deleteClient(id: number) {
+    const { error } = await supabase.from("clients").delete().eq("id", id);
+    if (error) {
+      throw error;
+    }
+  }
+}
