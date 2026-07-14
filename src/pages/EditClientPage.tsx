@@ -1,14 +1,16 @@
 import { IonButton, IonInput } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { ClientsService } from "../services/ClientsService";
 
 export default function EditClientPage(){
 
+    const history = useHistory();
     const[client,setClient]=useState({ name:"", email:"", phone:""});
-    const {id}=useParams();
+    const {id}=useParams<{id: string}>();
     const update=async()=>{
-        //llamar al servicio
+        await ClientsService.updateClient(Number(id), client);
+        history.push("/clients");
     }
     useEffect(() => {
         loadClient();

@@ -3,7 +3,7 @@ import { Client } from "../interfaces/Client";
 
 export class ClientsService {
   static async getClients() {
-    const { data, error } = await supabase.from("clients").select("");
+    const { data, error } = await supabase.from("clients").select("*");
 
     if (error) {
       throw error;
@@ -21,7 +21,7 @@ export class ClientsService {
   static async getClient(id: number) {
     const { data, error } = await supabase
       .from("clients")
-      .select("")
+      .select("*")
       .eq("id", id)
       .single();
     if (error) {
@@ -29,7 +29,17 @@ export class ClientsService {
     }
     return data;
   }
-  //Cierra clase ClientsService
+
+  static async updateClient(id: number, client: Client) {
+    const { error } = await supabase
+      .from("clients")
+      .update(client)
+      .eq("id", id);
+
+    if (error) {
+      throw error;
+    }
+  }
 
   static async deleteClient(id: number) {
     const { error } = await supabase.from("clients").delete().eq("id", id);
