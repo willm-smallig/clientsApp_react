@@ -37,6 +37,7 @@ import './theme/variables.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ClientsPage from './pages/ClientsPage';
 import AddPage from './pages/AddPage';
+import EditClientPage from './pages/EditClientPage';
 
 setupIonicReact();
 
@@ -52,6 +53,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/nuevo">
         <AddPage/>
+        </Route>
+        <Route exact path="/edit/:id">
+        <EditClientPage/>
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

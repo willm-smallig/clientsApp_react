@@ -7,13 +7,19 @@ import {
   useState,
 } from "react";
 import { ClientsService } from "../services/ClientsService";
+import { useHistory } from "react-router";
+import { IonButton } from "@ionic/react";
 
 export default function ClientsPage() {
+  const history = useHistory();
   const [clients, setClients] = useState<any[]>([]);
   const loadClients = async () => {
     const datos = await ClientsService.getClients();
     setClients(datos);
   };
+  /* const editar=async()=>{
+    history.push('/editar');
+  } */
 
   useEffect(() => {
     loadClients();
@@ -38,6 +44,7 @@ export default function ClientsPage() {
             <td>{cliente.name}</td>
             <td>{cliente.email}</td>
             <td>{cliente.phone}</td>
+            <td><IonButton routerLink={`/edit/${cliente.id}`}>Editar</IonButton></td>
           </tr>
         ))}
       </tbody>

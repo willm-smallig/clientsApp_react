@@ -17,4 +17,16 @@ export class ClientsService {
       throw error;
     }
   }
+
+  static async getClient(id: number) {
+    const { data, error } = await supabase
+      .from("clients")
+      .select("")
+      .eq("id", id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
 } //Cierra clase ClientsService

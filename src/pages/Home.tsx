@@ -1,6 +1,7 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
+import { useBootstrapBreakpoints } from 'react-bootstrap/esm/ThemeProvider';
 
 const Home: React.FC = () => {
   return (
@@ -8,6 +9,12 @@ const Home: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Blank</IonTitle>
+            <IonButton className='navbar navbar-expand-lg bg-body-tertiary' slot="end">
+              <IonButton routerLink='/'>Inicio</IonButton>
+              <IonButton routerLink='/home'>Home</IonButton>
+              <IonButton routerLink='/clients'>Ver clientes</IonButton>
+              <IonButton routerLink='/nuevo'>Añadir cliente</IonButton>
+            </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
