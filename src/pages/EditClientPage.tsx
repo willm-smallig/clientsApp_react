@@ -15,7 +15,7 @@ import { ClientsService } from "../services/ClientsService";
 
 export default function EditClientPage() {
   const history = useHistory();
-  const [client, setClient] = useState({ name: "", email: "", phone: "" });
+  const [client, setClient] = useState({ name: "", email: "", phone: "", importe: 0 });
   const { id } = useParams<{ id: string }>();
   const update = async () => {
     await ClientsService.updateClient(Number(id), client);
@@ -74,6 +74,12 @@ console.log('usando effect');
             value={client.phone}
             onIonChange={(e) =>
               setClient({ ...client, phone: e.detail.value ?? "" })
+            }
+          ></IonInput>
+          <IonInput
+            value={client.importe}
+            onIonChange={(e) =>
+              setClient({ ...client, importe: Number (e.detail.value) ?? 0 })
             }
           ></IonInput>
           <IonButton onClick={update}>Actualizar</IonButton>

@@ -16,7 +16,7 @@ export default function AddPage() {
   //console.log("nuevo cliente");
   //const navigate =useNavigate();//React Router 6
   const history = useHistory();
-  const [client, setClient] = useState({ name: "", email: "", phone: "" });
+  const [client, setClient] = useState({ name: "", email: "", phone: "", importe: 0 });
 
   const save = async () => {
     await ClientsService.addClient(client);

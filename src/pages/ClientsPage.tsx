@@ -74,6 +74,7 @@ export default function ClientsPage() {
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Phone</th>
+                <th>Facturación</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
               </tr>
@@ -85,6 +86,7 @@ export default function ClientsPage() {
                   <td>{cliente.name}</td>
                   <td>{cliente.email}</td>
                   <td>{cliente.phone}</td>
+                  <td>{cliente.importe}</td>
                   <td>
                     <IonButton routerLink={`/edit/${cliente.id}`}>
                       Editar
