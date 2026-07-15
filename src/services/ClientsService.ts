@@ -3,7 +3,7 @@ import { Client } from "../interfaces/Client";
 
 export class ClientsService {
   static async getClients() {
-    const { data, error } = await supabase.from("clients").select("*");
+    const { data, error } = await supabase.from("clients").select("*").order('id', {ascending:true});
 
     if (error) {
       throw error;
