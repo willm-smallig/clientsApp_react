@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { ClientsService } from "../services/ClientsService";
+import { } from "../pages/EditClient.css";
 
 export default function EditClientPage() {
   const history = useHistory();
@@ -54,6 +55,7 @@ console.log('usando effect');
             <IonTitle size="large">Blank</IonTitle>
           </IonToolbar>
         </IonHeader>
+        
         <div>
           <h2>Actualizar</h2>
           <h3>Formulario diseñado con componentes Ionic</h3>
@@ -76,6 +78,7 @@ console.log('usando effect');
               setClient({ ...client, phone: e.detail.value ?? "" })
             }
           ></IonInput>
+          
           <IonInput
             value={client.importe}
             onIonChange={(e) =>

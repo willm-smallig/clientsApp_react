@@ -40,34 +40,36 @@ import AddPage from "./pages/AddPage";
 import EditClientPage from "./pages/EditClientPage";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./ProtectedRoute";
+import { AuthProvider } from "./services/AuthContext";
 
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <ProtectedRoute path="/clients:id" component={EditClientPage} exact>
-          <ClientsPage />
-        </ProtectedRoute>
-        <Route exact path="/nuevo">
-          <AddPage />
-        </Route>
-        <Route exact path="/edit/:id">
-          <EditClientPage />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route exact path="/login">
-          <LoginPage />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+  <AuthProvider>
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          {/* Rutas públicas */}
+          <Route exact path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/clients">
+            <ClientsPage />
+          </Route>
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+
+          {/* Estas Rutas solo se verán con sesión activa */}
+          <ProtectedRoute exact path="/nuevo" component={AddPage} />
+          <ProtectedRoute exact path="/edit/:id" component={EditClientPage} />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  </AuthProvider>
 );
 
 export default App;

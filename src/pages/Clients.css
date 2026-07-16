@@ -1,0 +1,28 @@
+.mibtn {
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+  &:hover {
+    box-shadow: 0 10px 20px rgba(87, 134, 161, 0.5);
+    transform: translateY(-3px);
+  }
+}
+
+table {
+  border-radius: 50px;
+  display: inline-block;
+  padding: 10px 24px;
+  background: rgb(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  margin: 20px auto;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #292946;
+  margin-left: 12px;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
