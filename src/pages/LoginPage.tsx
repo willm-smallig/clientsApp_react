@@ -1,19 +1,40 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
-import { AuthService } from "../services/AuthService";
-import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import { useAuth } from "../context/AuthContext";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonSpinner,
+} from "@ionic/react";
 
 export default function LoginPage() {
   const history = useHistory();
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const login = async () => {
+  const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
     try {
-      await AuthService.login(email, password);
+      await login(email, password);
       history.push("/clients");
     } catch {
-      alert("Credenciales incorrectas");
+      setError("Credenciales incorrectas. Comprueba tu email y contraseña.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -21,30 +42,59 @@ export default function LoginPage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>Iniciar sesión</IonTitle>
           <IonButtons slot="end">
-            <IonButton routerLink="/">Inicio</IonButton>
-            <IonButton routerLink="/home">Home</IonButton>
             <IonButton routerLink="/clients">Ver clientes</IonButton>
-            <IonButton routerLink="/nuevo">Añadir cliente</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">Iniciar sesión</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <div>
-          <h2>Iniciar sesión</h2>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button onClick={login}>Guardar</button>
+
+        <div className="container mt-4" style={{ maxWidth: 480 }}>
+          <h2>Acceso al sistema</h2>
+
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+
+          <IonItem>
+            <IonLabel position="stacked">Correo electrónico</IonLabel>
+            <IonInput
+              type="email"
+              value={email}
+              placeholder="tu@email.com"
+              onIonChange={(e) => setEmail(e.detail.value ?? "")}
+            />
+          </IonItem>
+
+          <IonItem className="mt-2">
+            <IonLabel position="stacked">Contraseña</IonLabel>
+            <IonInput
+              type="password"
+              value={password}
+              placeholder="••••••••"
+              onIonChange={(e) => setPassword(e.detail.value ?? "")}
+            />
+          </IonItem>
+
+          <div className="mt-3">
+            <IonButton
+              expand="block"
+              onClick={handleLogin}
+              disabled={loading || !email || !password}
+            >
+              {loading ? <IonSpinner name="crescent" /> : "Entrar"}
+            </IonButton>
+          </div>
         </div>
       </IonContent>
     </IonPage>
   );
 }
-
-

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ClientsService } from "../services/ClientsService";
+import { useAuth } from "../context/AuthContext";
 import {
   IonButton,
   IonButtons,
@@ -12,6 +13,8 @@ import {
 } from "@ionic/react";
 
 export default function ClientsPage() {
+  const { isAuthenticated, logout } = useAuth();
+
   const [clients, setClients] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
@@ -30,6 +33,11 @@ export default function ClientsPage() {
   };
 
   const eliminar = async (id: number) => {
+    // Comprobación de seguridad: aunque el botón esté oculto, verificamos auth
+    if (!isAuthenticated) {
+      alert("Debes iniciar sesión para eliminar un cliente.");
+      return;
+    }
     const ok = confirm("¿Deseas eliminar el registro?");
     if (ok) {
       await ClientsService.deleteClient(id);
@@ -37,32 +45,46 @@ export default function ClientsPage() {
     }
   };
 
-  /*  useEffect(() => {
-    loadClients();
-  }, []); */
-
   useIonViewWillEnter(() => {
     loadClients();
-    console.log("usando effect");
   }, []);
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>Clientes</IonTitle>
           <IonButtons slot="end">
             <IonButton routerLink="/">Inicio</IonButton>
             <IonButton routerLink="/home">Home</IonButton>
             <IonButton routerLink="/clients">Ver clientes</IonButton>
-            <IonButton routerLink="/nuevo">Añadir cliente</IonButton>
+
+            {/* Solo visible si está autenticado */}
+            {isAuthenticated && (
+              <IonButton routerLink="/nuevo">Añadir cliente</IonButton>
+            )}
+
+            {/* Botón de sesión: login u logout según estado */}
+            {isAuthenticated ? (
+              <IonButton onClick={handleLogout} color="danger">
+                Cerrar sesión
+              </IonButton>
+            ) : (
+              <IonButton routerLink="/login" color="primary">
+                Iniciar sesión
+              </IonButton>
+            )}
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">Clientes</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div className="container mt-4">
@@ -75,8 +97,9 @@ export default function ClientsPage() {
                 <th>Correo</th>
                 <th>Phone</th>
                 <th>Facturación</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
+                {/* Columnas de acción solo visibles si está autenticado */}
+                {isAuthenticated && <th>Editar</th>}
+                {isAuthenticated && <th>Eliminar</th>}
               </tr>
             </thead>
             <tbody>
@@ -87,16 +110,20 @@ export default function ClientsPage() {
                   <td>{cliente.email}</td>
                   <td>{cliente.phone}</td>
                   <td>{cliente.importe}</td>
-                  <td>
-                    <IonButton routerLink={`/edit/${cliente.id}`}>
-                      Editar
-                    </IonButton>
-                  </td>
-                  <td>
-                    <IonButton onClick={() => eliminar(cliente.id)}>
-                      Eliminar
-                    </IonButton>
-                  </td>
+                  {isAuthenticated && (
+                    <td>
+                      <IonButton routerLink={`/edit/${cliente.id}`}>
+                        Editar
+                      </IonButton>
+                    </td>
+                  )}
+                  {isAuthenticated && (
+                    <td>
+                      <IonButton onClick={() => eliminar(cliente.id)}>
+                        Eliminar
+                      </IonButton>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -13,7 +13,10 @@ export class AuthService {
     return data;
   }
   static async logout() {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw error;
+    }
   }
   static async getSession() {
     const { data } = await supabase.auth.getSession();
