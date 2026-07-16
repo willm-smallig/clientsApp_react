@@ -9,7 +9,6 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonNote,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -80,6 +79,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               placeholder="••••••••"
+              // detecta cambios y actualiza estado
               onIonChange={(e) => setPassword(e.detail.value ?? "")}
             />
           </IonItem>
@@ -88,6 +88,7 @@ export default function LoginPage() {
             <IonButton
               expand="block"
               onClick={handleLogin}
+              // verifica la condición para habilitar/deshabilitar
               disabled={loading || !email || !password}
             >
               {loading ? <IonSpinner name="crescent" /> : "Entrar"}

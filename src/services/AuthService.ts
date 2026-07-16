@@ -23,7 +23,7 @@ export class AuthService {
     return data.session;
   }
   static async isAuthenticated() {
-    const session = await this.getSession();
-    return !!session;
+    const session = await this.getSession(); //obtiene la sesión (objeto o null)
+    return !!session; // Devuelve true si la sesión está activa, false si no lo está
   }
 }

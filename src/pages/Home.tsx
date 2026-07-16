@@ -1,7 +1,6 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
-import { useBootstrapBreakpoints } from 'react-bootstrap/esm/ThemeProvider';
 
 const Home: React.FC = () => {
   return (

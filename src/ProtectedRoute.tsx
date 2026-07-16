@@ -4,6 +4,7 @@ import { IonSpinner } from "@ionic/react";
 import { useAuth } from "./context/AuthContext";
 
 interface ProtectedRouteProps extends RouteProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: React.ComponentType<any>;
 }
 

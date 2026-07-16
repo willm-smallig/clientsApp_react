@@ -20,8 +20,7 @@ export default function AddPage() {
 
   const save = async () => {
     await ClientsService.addClient(client);
-    //NavigateEvent('/clients');
-    history.push("/clients");
+    history.push("/clients", { showToast: true });
   };
 
   return (
@@ -46,13 +45,27 @@ export default function AddPage() {
         <div>
           <h2>Nuevo cliente</h2>
           <input
+            type="text"
+            value={client.name}
+            placeholder="Nombre"
             onChange={(e) => setClient({ ...client, name: e.target.value })}
           />
           <input
+            type="email"
+            value={client.email}
+            placeholder="Correo electrónico"
             onChange={(e) => setClient({ ...client, email: e.target.value })}
           />
           <input
+            type="text"
+            value={client.phone}
+            placeholder="Teléfono"
             onChange={(e) => setClient({ ...client, phone: e.target.value })}
+          />
+          <input
+            value={client.importe}
+            placeholder="Importe"
+            onChange={(e) => setClient({ ...client, importe: Number(e.target.value) || 0 })}
           />
           <button onClick={save}>Guardar</button>
         </div>

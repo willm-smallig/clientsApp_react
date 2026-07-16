@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, {
   createContext,
   useContext,
@@ -59,7 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await AuthService.logout();
     // onAuthStateChange limpiará la sesión automáticamente
   };
-
+  /* ? es un operador ternario que se usa para evaluar una expresión y
+  devolver un valor si la expresión es verdadera y otro valor si es falsa */
   const value: AuthContextType = {
     session,
     user: session?.user ?? null,

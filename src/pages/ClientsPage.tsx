@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { Geolocation } from "@capacitor/geolocation";
+import { useState } from "react";
+import { useHistory } from "react-router";
 import { ClientsService } from "../services/ClientsService";
 import { useAuth } from "../context/AuthContext";
+import "./Clients.css";
 import {
   IonButton,
   IonButtons,
@@ -8,14 +11,24 @@ import {
   IonHeader,
   IonPage,
   IonTitle,
+  IonToast,
   IonToolbar,
   useIonViewWillEnter,
 } from "@ionic/react";
 
+interface Client {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  importe: number;
+}
+
 export default function ClientsPage() {
   const { isAuthenticated, logout } = useAuth();
+  const history = useHistory();
 
-  const [clients, setClients] = useState<any[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
   const lastIndex = currentPage * recordsPerPage;
@@ -26,6 +39,8 @@ export default function ClientsPage() {
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
+
+  const [showToast, setShowToast] = useState(false);
 
   const loadClients = async () => {
     const datos = await ClientsService.getClients();
@@ -45,9 +60,28 @@ export default function ClientsPage() {
     }
   };
 
+  const getLocation = async () => {
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      console.log("Latitude:", position.coords.latitude);
+      console.log("Longitude:", position.coords.longitude);
+    } catch (err) {
+      console.error("Error getting location:", err);
+    }
+  };
+
   useIonViewWillEnter(() => {
     loadClients();
-  }, []);
+    getLocation();
+
+    // Check if redirect passed showToast state
+    const state = history.location.state as { showToast?: boolean };
+    if (state?.showToast) {
+      setShowToast(true);
+      // Clear state so it doesn't show again on reload
+      history.replace({ ...history.location, state: undefined });
+    }
+  }, [history]);
 
   const handleLogout = async () => {
     await logout();
@@ -87,9 +121,15 @@ export default function ClientsPage() {
             <IonTitle size="large">Clientes</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <div className="container mt-4">
-          <h2>Tabla de clientes</h2>
-          <table className="table table-bordered">
+        <h2>Tabla de clientes</h2>
+        <div className="container-fluid table-responsive">
+          <IonToast
+            isOpen={showToast}
+            onDidDismiss={() => setShowToast(false)}
+            message="Cliente guardado"
+            duration={2000}
+          />
+          <table>
             <thead>
               <tr>
                 <th>ID</th>
@@ -112,14 +152,14 @@ export default function ClientsPage() {
                   <td>{cliente.importe}</td>
                   {isAuthenticated && (
                     <td>
-                      <IonButton routerLink={`/edit/${cliente.id}`}>
+                      <IonButton className="mibtn" routerLink={`/edit/${cliente.id}`}>
                         Editar
                       </IonButton>
                     </td>
                   )}
                   {isAuthenticated && (
                     <td>
-                      <IonButton onClick={() => eliminar(cliente.id)}>
+                      <IonButton className="mibtn" onClick={() => eliminar(cliente.id)}>
                         Eliminar
                       </IonButton>
                     </td>
@@ -128,6 +168,7 @@ export default function ClientsPage() {
               ))}
             </tbody>
           </table>
+          </div>
           <div className="d-flex justify-content-center mt-3">
             {pageNumbers.map((page) => (
               <button
@@ -142,7 +183,7 @@ export default function ClientsPage() {
                 {page}
               </button>
             ))}
-          </div>
+          
         </div>
       </IonContent>
     </IonPage>

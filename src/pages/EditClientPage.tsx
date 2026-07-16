@@ -9,37 +9,49 @@ import {
   IonToolbar,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { ClientsService } from "../services/ClientsService";
+import "./EditClient.css";
+
+interface ClientData {
+  name: string;
+  email: string;
+  phone: string;
+  importe: number;
+}
 
 export default function EditClientPage() {
   const history = useHistory();
-  const [client, setClient] = useState({ name: "", email: "", phone: "", importe: 0 });
   const { id } = useParams<{ id: string }>();
-  const update = async () => {
-    await ClientsService.updateClient(Number(id), client);
-    history.push("/clients");
-  };
-  /*useEffect(() => {
-    loadClient();
-  }, []);*/
 
-  useIonViewWillEnter(() => {
-loadClient();
-console.log('usando effect');
-}, []);
+  const [client, setClient] = useState<ClientData>({
+    name: "",
+    email: "",
+    phone: "",
+    importe: 0,
+  });
 
   const loadClient = async () => {
-    const dato: any = await ClientsService.getClient(Number(id));
+    const dato = (await ClientsService.getClient(Number(id))) as ClientData;
     setClient(dato);
   };
+
+  const update = async () => {
+    await ClientsService.updateClient(Number(id), client);
+    history.push("/clients", { showToast: true });
+  };
+
+  useIonViewWillEnter(() => {
+    loadClient();
+    console.log("usando effect");
+  }, []);
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>Editar cliente</IonTitle>
           <IonButtons slot="end">
             <IonButton routerLink="/">Inicio</IonButton>
             <IonButton routerLink="/home">Home</IonButton>
@@ -48,41 +60,75 @@ console.log('usando effect');
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <div>
-          <h2>Actualizar</h2>
-          <h3>Formulario diseñado con componentes Ionic</h3>
 
-          <IonInput
-            value={client.name}
-            onIonChange={(e) =>
-              setClient({ ...client, name: e.detail.value ?? "" })
-            }
-          ></IonInput>
-          <IonInput
-            value={client.email}
-            onIonChange={(e) =>
-              setClient({ ...client, email: e.detail.value ?? "" })
-            }
-          ></IonInput>
-          <IonInput
-            value={client.phone}
-            onIonChange={(e) =>
-              setClient({ ...client, phone: e.detail.value ?? "" })
-            }
-          ></IonInput>
-          <IonInput
-            value={client.importe}
-            onIonChange={(e) =>
-              setClient({ ...client, importe: Number (e.detail.value) ?? 0 })
-            }
-          ></IonInput>
-          <IonButton onClick={update}>Actualizar</IonButton>
+      <IonContent fullscreen>
+        <div className="edit-page">
+          <div className="edit-card">
+            <h2 className="edit-title">Actualizar</h2>
+            <p className="edit-subtitle">
+              Modifica los datos del cliente.
+            </p>
+
+            <div className="edit-form">
+              <div className="form-group">
+                <label className="form-label">Nombre</label>
+                <IonInput
+                  className="form-input"
+                  type="text"
+                  placeholder="Nombre del cliente"
+                  value={client.name}
+                  onIonChange={(e) =>
+                    setClient({ ...client, name: e.detail.value ?? "" })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Correo electrónico</label>
+                <IonInput
+                  className="form-input"
+                  type="email"
+                  placeholder="correo@ejemplo.com"
+                  value={client.email}
+                  onIonChange={(e) =>
+                    setClient({ ...client, email: e.detail.value ?? "" })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Teléfono</label>
+                <IonInput
+                  className="form-input"
+                  type="tel"
+                  placeholder="600123123"
+                  value={client.phone}
+                  onIonChange={(e) =>
+                    setClient({ ...client, phone: e.detail.value ?? "" })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Importe</label>
+                <IonInput
+                  className="form-input"
+                  placeholder="0"
+                  value={client.importe}
+                  onIonChange={(e) =>
+                    setClient({
+                      ...client,
+                      importe: Number(e.detail.value || 0),
+                    })
+                  }
+                />
+              </div>
+
+              <IonButton className="edit-button" expand="block" onClick={update}>
+                Actualizar
+              </IonButton>
+            </div>
+          </div>
         </div>
       </IonContent>
     </IonPage>
