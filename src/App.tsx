@@ -1,3 +1,4 @@
+import { Toaster } from "./components/ui/sonner";
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -48,6 +49,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <AuthProvider>
     <IonApp>
+  <Toaster position="top-right" richColors />
       <IonReactRouter>
         <IonRouterOutlet>
           {/* Rutas públicas */}
@@ -71,6 +73,5 @@ const App: React.FC = () => (
       </IonReactRouter>
     </IonApp>
   </AuthProvider>
-);
-
+)
 export default App;

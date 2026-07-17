@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { Geolocation } from "@capacitor/geolocation";
 import { useState } from "react";
 import { useHistory } from "react-router";
@@ -31,9 +32,6 @@ export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
-  const currentClients = clients.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(clients.length / recordsPerPage);
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -41,6 +39,7 @@ export default function ClientsPage() {
   }
 
   const [showToast, setShowToast] = useState(false);
+  const [search, setSearch] = useState("");
 
   const loadClients = async () => {
     const datos = await ClientsService.getClients();
@@ -81,15 +80,14 @@ export default function ClientsPage() {
     }
   }, [history]);
 
+  const filteredClients = clients.filter(c => 
+    (c.name || "").toLowerCase().includes(search.toLowerCase())
+  );
+
   const handleLogout = async () => {
     await logout();
   };
 
-  const [search, setSearch] = useState("");
-const filteredClients =
-clients.filter(c => c.name.toLowerCase().includes(
-search.toLowerCase()
-));
   return (
     <IonPage>
       <IonHeader>
@@ -131,15 +129,14 @@ search.toLowerCase()
           message="Cliente guardado"
           duration={2000}
         />
+        <div className="d-flex justify-center items-center"><input className="search-bar"
+          type="text"
+          value={search}
+          placeholder="Buscar por nombre"
+          onChange={(e) => setSearch(e.target.value)}
+        /></div>
         <div>
-          <input
-            className="form-control"
-            placeholder="Buscar"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          
-          <table className="table geomini">
+          <table  className="table geomini">
             <thead>
               <tr>
                 <th>ID</th>

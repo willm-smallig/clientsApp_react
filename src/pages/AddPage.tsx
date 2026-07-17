@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ClientsService } from "../services/ClientsService";
-import { useHistory } from "react-router"; //react-router-dom 5
+import { useHistory } from "react-router";
+import { toast } from "sonner";
 import {
   IonPage,
   IonHeader,
@@ -9,28 +10,26 @@ import {
   IonButtons,
   IonButton,
   IonContent,
-  IonToast,
 } from "@ionic/react";
-//import { useNavigate } from 'react-router-dom';
 
 export default function AddPage() {
-  //console.log("nuevo cliente");
-  //const navigate =useNavigate();//React Router 6
   const history = useHistory();
-  const [client, setClient] = useState({ name: "", email: "", phone: "", importe: 0 });
+  const [client, setClient] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    importe: 0,
+  });
 
   const save = async () => {
-    await ClientsService.addClient(client);
-    history.push("/clients", { showToast: true });
+    try {
+      await ClientsService.addClient(client);
+      toast.success("Cliente guardado");
+      history.push("/clients", { showToast: true });
+    } catch {
+      toast.error("Error al guardar el cliente");
+    }
   };
-
-  const [showToast, setShowToast] = useState(false);
-          <IonToast
-            isOpen={showToast}
-            onDidDismiss={() => setShowToast(true)}
-            message="Cliente guardado"
-            duration={2000}
-          />
 
   return (
     <IonPage>
@@ -74,7 +73,9 @@ export default function AddPage() {
           <input
             value={client.importe}
             placeholder="Importe"
-            onChange={(e) => setClient({ ...client, importe: Number(e.target.value) || 0 })}
+            onChange={(e) =>
+              setClient({ ...client, importe: Number(e.target.value) || 0 })
+            }
           />
           <button onClick={save}>Guardar</button>
         </div>
