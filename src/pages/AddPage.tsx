@@ -9,6 +9,7 @@ import {
   IonButtons,
   IonButton,
   IonContent,
+  IonToast,
 } from "@ionic/react";
 //import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +23,14 @@ export default function AddPage() {
     await ClientsService.addClient(client);
     history.push("/clients", { showToast: true });
   };
+
+  const [showToast, setShowToast] = useState(false);
+          <IonToast
+            isOpen={showToast}
+            onDidDismiss={() => setShowToast(true)}
+            message="Cliente guardado"
+            duration={2000}
+          />
 
   return (
     <IonPage>

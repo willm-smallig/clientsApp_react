@@ -74,11 +74,9 @@ export default function ClientsPage() {
     loadClients();
     getLocation();
 
-    // Check if redirect passed showToast state
     const state = history.location.state as { showToast?: boolean };
     if (state?.showToast) {
       setShowToast(true);
-      // Clear state so it doesn't show again on reload
       history.replace({ ...history.location, state: undefined });
     }
   }, [history]);
@@ -87,6 +85,11 @@ export default function ClientsPage() {
     await logout();
   };
 
+  const [search, setSearch] = useState("");
+const filteredClients =
+clients.filter(c => c.name.toLowerCase().includes(
+search.toLowerCase()
+));
   return (
     <IonPage>
       <IonHeader>
@@ -122,13 +125,20 @@ export default function ClientsPage() {
           </IonToolbar>
         </IonHeader>
         <h2>Tabla de clientes</h2>
-          <IonToast
-            isOpen={showToast}
-            onDidDismiss={() => setShowToast(false)}
-            message="Cliente guardado"
-            duration={2000}
+        <IonToast
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message="Cliente guardado"
+          duration={2000}
+        />
+        <div>
+          <input
+            className="form-control"
+            placeholder="Buscar"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <div>
+          
           <table className="table geomini">
             <thead>
               <tr>
@@ -143,7 +153,7 @@ export default function ClientsPage() {
               </tr>
             </thead>
             <tbody>
-              {currentClients.map((cliente) => (
+              {filteredClients.map((cliente) => (
                 <tr key={cliente.id}>
                   <td>{cliente.id}</td>
                   <td>{cliente.name}</td>
@@ -152,14 +162,20 @@ export default function ClientsPage() {
                   <td>{cliente.importe}</td>
                   {isAuthenticated && (
                     <td>
-                      <IonButton className="mibtn" routerLink={`/edit/${cliente.id}`}>
+                      <IonButton
+                        className="mibtn"
+                        routerLink={`/edit/${cliente.id}`}
+                      >
                         Editar
                       </IonButton>
                     </td>
                   )}
                   {isAuthenticated && (
                     <td>
-                      <IonButton className="mibtn" onClick={() => eliminar(cliente.id)}>
+                      <IonButton
+                        className="mibtn"
+                        onClick={() => eliminar(cliente.id)}
+                      >
                         Eliminar
                       </IonButton>
                     </td>
@@ -168,23 +184,21 @@ export default function ClientsPage() {
               ))}
             </tbody>
           </table>
-          
-          </div>
-          <div className="d-flex justify-content-center mt-3">
-            {pageNumbers.map((page) => (
-              <button
-                key={page}
-                className={
-                  page === currentPage
-                    ? "btn btn-primary mx-1"
-                    : "btn btn-outline-primary mx-1"
-                }
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </button>
-            ))}
-          
+        </div>
+        <div className="d-flex justify-content-center mt-3">
+          {pageNumbers.map((page) => (
+            <button
+              key={page}
+              className={
+                page === currentPage
+                  ? "btn btn-primary mx-1"
+                  : "btn btn-outline-primary mx-1"
+              }
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
         </div>
       </IonContent>
     </IonPage>

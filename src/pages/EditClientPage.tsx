@@ -6,6 +6,7 @@ import {
   IonInput,
   IonPage,
   IonTitle,
+  IonToast,
   IonToolbar,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -65,9 +66,7 @@ export default function EditClientPage() {
         <div className="edit-page">
           <div className="edit-card">
             <h2 className="edit-title">Actualizar</h2>
-            <p className="edit-subtitle">
-              Modifica los datos del cliente.
-            </p>
+            <p className="edit-subtitle">Modifica los datos del cliente.</p>
 
             <div className="edit-form">
               <div className="form-group">
@@ -124,7 +123,11 @@ export default function EditClientPage() {
                 />
               </div>
 
-              <IonButton className="edit-button" expand="block" onClick={update}>
+              <IonButton
+                className="edit-button"
+                expand="block"
+                onClick={update}
+              >
                 Actualizar
               </IonButton>
             </div>
