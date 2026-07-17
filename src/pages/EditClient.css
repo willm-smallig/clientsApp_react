@@ -30,7 +30,6 @@
   margin: 20px auto;
   overflow: hidden;
   text-align: left;
-
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -75,13 +74,7 @@
       "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   }
 
-  .edit-title,
-  .edit-subtitle {
-    text-align: center;
-  }
-
   .edit-button {
-    width: 100%;
     margin-top: 8px;
   }
 }

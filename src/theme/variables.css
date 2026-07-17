@@ -1,2 +1,10 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+
+/*@import "tailwindcss";
+@plugin "daisyui" {
+themes:
+    dark --default,
+    dark --prefersdark,
+    dark --luxury;
+}*/

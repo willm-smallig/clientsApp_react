@@ -122,14 +122,14 @@ export default function ClientsPage() {
           </IonToolbar>
         </IonHeader>
         <h2>Tabla de clientes</h2>
-        <div className="container-fluid table-responsive">
           <IonToast
             isOpen={showToast}
             onDidDismiss={() => setShowToast(false)}
             message="Cliente guardado"
             duration={2000}
           />
-          <table>
+          <div>
+          <table className="table geomini">
             <thead>
               <tr>
                 <th>ID</th>
@@ -168,6 +168,7 @@ export default function ClientsPage() {
               ))}
             </tbody>
           </table>
+          
           </div>
           <div className="d-flex justify-content-center mt-3">
             {pageNumbers.map((page) => (
