@@ -12,6 +12,10 @@ ion-content{
   }
 }
 
+.form-control {
+  width: auto;
+}
+
 table {
   backdrop-filter: blur(16px);
   width: auto;
